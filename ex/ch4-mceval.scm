@@ -305,6 +305,7 @@
         (list 'cdr cdr)
         (list 'cons cons)
         (list 'null? null?)
+        (list '+ +)
 ;;      more primitives
         ))
 
