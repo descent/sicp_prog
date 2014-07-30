@@ -72,7 +72,8 @@
 
 (define (user-print object)
   (newline)
-  (display "i_am_user-print")
+  (display "output: ")
+  (display object)
   (newline)
 )
 
