@@ -120,6 +120,7 @@
         (list 'cons cons)
         (list 'null? null?)
         (list '+ +)
+        (list '* *)
 ;;      more primitives
         ))
 
