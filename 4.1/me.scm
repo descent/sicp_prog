@@ -3,7 +3,7 @@
 (define output-prompt ";;;M-Eval value")
 
 (define apply-in-underlying-scheme apply)
-(define (primitive-implementation proc) (car proc))
+(define (primitive-implementation proc) (cadr proc))
 
 (define (apply-primitive-procedure proc args)
   (apply-in-underlying-scheme
@@ -44,8 +44,34 @@
         ((string? exp) true)
         (else false)))
 
+;(define (lookup-variable-value var env)
+;  (list +) )
+
+(define (enclosing-environment env) (cdr env))
+(define (first-frame env) (car env))
+(define (frame-variables frame) (car frame))
+(define (frame-values frame) (cdr frame))
+
 (define (lookup-variable-value var env)
-  (list +) )
+  (display "\n!!!")
+  (display var)
+  (newline)
+  (display env)
+  (display "!!!\n")
+  (define (env-loop env)
+    (define (scan vars vals)
+      (cond ((null? vars)
+             (env-loop (enclosing-environment env)))
+            ((eq? var (car vars))
+             (car vals))
+            (else (scan (cdr vars) (cdr vals)))))
+    (if (eq? env the-empty-environment)
+        (error "Unbound variable" var)
+        (let ((frame (first-frame env)))
+          (scan (frame-variables frame)
+                (frame-values frame)))))
+  (env-loop env))
+
 
 (define (variable? exp) (symbol? exp))
 
@@ -61,12 +87,58 @@
                 (list-of-values (operands exp) env)))
         (else (error "Unknows expression type -- EVAL" exp))))
 
+(define (make-frame variables values)
+  (cons variables values))
+
+(define (extend-environment vars vals base-env)
+  (if (= (length vars) (length vals))
+      (cons (make-frame vars vals) base-env)
+      (if (< (length vars) (length vals))
+          (error "Too many arguments supplied" vars vals)
+          (error "Too few arguments supplied" vars vals))))
+
+(define the-empty-environment '())
+
+(define (add-binding-to-frame! var val frame)
+  (set-car! frame (cons var (car frame)))
+  (set-cdr! frame (cons val (cdr frame))))
+
+(define (define-variable! var val env)
+  (let ((frame (first-frame env)))
+    (define (scan vars vals)
+      (cond ((null? vars)
+             (add-binding-to-frame! var val frame))
+            ((eq? var (car vars))
+             (set-car! vals val))
+            (else (scan (cdr vars) (cdr vals)))))
+    (scan (frame-variables frame)
+          (frame-values frame))))
+
+(define primitive-procedures
+  (list (list 'car car)
+        (list 'cdr cdr)
+        (list 'cons cons)
+        (list 'null? null?)
+        (list '+ +)
+;;      more primitives
+        ))
+
+(define (primitive-procedure-names)
+  (map car
+       primitive-procedures))
+
+(define (primitive-procedure-objects)
+  (map (lambda (proc) (list 'primitive (cadr proc)))
+       primitive-procedures))
 
 (define (setup-environment)
-  (newline)
-  (display "i am setup-env")
-  (newline)
-)
+  (let ((initial-env
+         (extend-environment (primitive-procedure-names)
+                             (primitive-procedure-objects)
+                             the-empty-environment)))
+    (define-variable! 'true true initial-env)
+    (define-variable! 'false false initial-env)
+    initial-env))
 
 (define the-global-environment (setup-environment))
 
@@ -92,6 +164,9 @@
 (define (annouce-output string)
   (newline) (display string) (newline))
 
-(driver-loop)
 ;(apply-primitive-procedure (list +) (list 1 2))
+;(display the-global-environment)
 
+;(display "***") (display (lookup-variable-value '+ the-global-environment)) (display "***\n")
+
+(driver-loop)
