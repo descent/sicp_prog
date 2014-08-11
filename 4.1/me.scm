@@ -28,14 +28,38 @@
     (cons (eval (first-operand exps) env)
           (list-of-values (rest-operands exps) env))))
 
+(define (last-exp? seq) (null? (cdr seq)))
+(define (first-exp seq) (car seq))
+(define (rest-exps seq) (cdr seq))
+
+(define (eval-sequence exps env)
+  (cond ((last-exp? exps) (eval (first-exp exps) env))
+        (else (eval (first-exp exps) env)
+              (eval-sequence (rest-exps exps) env))))
+
+(define (procedure-parameters p) (cadr p))
+(define (procedure-body p) (caddr p))
+(define (procedure-environment p) (cadddr p))
+
 (define (apply procedure arguments)
-  (display "ppp---")
+  (display "\n---proc---\n")
   (display procedure)
-  (newline)
+  (display "\n---args---\n")
   (display arguments)
-  (display "---ppp---\n")
+  (display "------\n")
   ;'ok)
-  (apply-primitive-procedure procedure arguments))
+  (cond ((primitive-procedure? procedure)
+         (apply-primitive-procedure procedure arguments))
+        ((compound-procedure? procedure)
+         (eval-sequence
+           (procedure-body procedure)
+           (extend-environment
+             (procedure-parameters procedure)
+             arguments
+             (procedure-environment procedure))))
+        (else
+         (error
+          "Unknown procedure type -- APPLY" procedure))))
 
 
 
@@ -74,6 +98,10 @@
 
 (define (lambda? exp) (tagged-list? exp 'lambda))
 (define (variable? exp) (symbol? exp))
+(define (compound-procedure? p)
+  (tagged-list? p 'procedure))
+(define (primitive-procedure? proc)
+  (tagged-list? proc 'primitive))
 
 (define (tagged-list? exp tag)
   (if (pair? exp)
@@ -110,7 +138,8 @@
 (define (make-procedure parameters body env)
   (list 'procedure parameters body env))
 
-
+; (lambda (x) (+ x 4))
+; ((lambda (x) (+ x 4)) 5)
 ; 4.1.3 Operations on Environment 有提到什麼是環境
 (define (eval exp env)
   (display "#")
