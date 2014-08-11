@@ -75,12 +75,41 @@
 
 (define (variable? exp) (symbol? exp))
 
+(define (tagged-list? exp tag)
+  (if (pair? exp)
+      (eq? (car exp) tag)
+      false))
+
+(define (definition? exp)
+  (tagged-list? exp 'define))
+
+(define (definition-variable exp)
+  (if (symbol? (cadr exp))
+      (cadr exp)
+      (caadr exp)))
+
+(define (make-lambda parameters body)
+  (cons 'lambda (cons parameters body)))
+
+(define (definition-value exp)
+  (if (symbol? (cadr exp))
+      (caddr exp)
+      (make-lambda (cdadr exp)
+                   (cddr exp))))
+
+(define (eval-definition exp env)
+  (define-variable! (definition-variable exp)
+                    (eval (definition-value exp) env)
+                    env)
+  'ok)
+
 ; 4.1.3 Operations on Environment 有提到什麼是環境
 (define (eval exp env)
   (display "#")
   (display exp)
   (display "#\n")
   (cond ((self-evaluating? exp) exp)
+        ((definition? exp) (eval-definition exp env))
         ((variable? exp) (lookup-variable-value exp env))
         ((application? exp)
          (apply (eval (operator exp) env)
