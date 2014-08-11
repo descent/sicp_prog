@@ -72,7 +72,7 @@
                 (frame-values frame)))))
   (env-loop env))
 
-
+(define (lambda? exp) (tagged-list? exp 'lambda))
 (define (variable? exp) (symbol? exp))
 
 (define (tagged-list? exp tag)
@@ -89,6 +89,7 @@
       (caadr exp)))
 
 (define (make-lambda parameters body)
+  (display (cons 'lambda (cons parameters body)))
   (cons 'lambda (cons parameters body)))
 
 (define (definition-value exp)
@@ -103,6 +104,13 @@
                     env)
   'ok)
 
+(define (lambda-parameters exp) (cadr exp))
+(define (lambda-body exp) (cddr exp))
+
+(define (make-procedure parameters body env)
+  (list 'procedure parameters body env))
+
+
 ; 4.1.3 Operations on Environment 有提到什麼是環境
 (define (eval exp env)
   (display "#")
@@ -111,6 +119,11 @@
   (cond ((self-evaluating? exp) exp)
         ((definition? exp) (eval-definition exp env))
         ((variable? exp) (lookup-variable-value exp env))
+        ((lambda? exp)
+         (make-procedure (lambda-parameters exp) 
+                         (lambda-body exp) 
+                         env))
+
         ((application? exp)
          (apply (eval (operator exp) env)
                 (list-of-values (operands exp) env)))
@@ -185,8 +198,8 @@
     (let ((output (eval input the-global-environment)))
       (annouce-output output-prompt)
       (user-print output)))
-  'run)
-  ;(driver-loop))
+  ;'run)
+  (driver-loop))
 
 (define (prompt-for-input string)
   (newline) (newline) (display string) (newline))
