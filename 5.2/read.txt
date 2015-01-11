@@ -1,0 +1,235 @@
+
+;Loading "c.scm"...
+insts/lables:
+(
+  ((test (op =) (reg b) (const 0))) 
+  ((branch (label gcd-done))) 
+  ((assign t (op rem) (reg a) (reg b))) 
+  ((assign a (reg b))) 
+  ((assign b (reg t))) 
+  ((goto (label test-b)))
+)
+
+(
+  (test-b ((test (op =) (reg b) (const 0))) ((branch (label gcd-done))) ((assign t (op rem) (reg a) (reg b))) ((assign a (reg b))) ((assign b (reg t))) ((goto (label test-b)))) 
+  (gcd-done)
+)
+
+
+
+after run update-inst!
+update-inst! insts/lables:
+
+
+insts:
+(
+  ((test (op =) (reg b) (const 0)) . #[compound-procedure 11]) 
+  ((branch (label gcd-done)) . #[compound-procedure 12]) 
+  ((assign t (op rem) (reg a) (reg b)) . #[compound-procedure 13]) 
+  ((assign a (reg b)) . #[compound-procedure 14]) 
+  ((assign b (reg t)) . #[compound-procedure 15]) 
+  ((goto (label test-b)) . #[compound-procedure 16])
+)
+
+labels:
+(
+  (
+    test-b 
+    ((test (op =) (reg b) (const 0)) . #[compound-procedure 11]) 
+    ((branch (label gcd-done)) . #[compound-procedure 12]) 
+    ((assign t (op rem) (reg a) (reg b)) . #[compound-procedure 13]) 
+    ((assign a (reg b)) . #[compound-procedure 14]) 
+    ((assign b (reg t)) . #[compound-procedure 15]) 
+    ((goto (label test-b)) . #[compound-procedure 16])
+  ) 
+
+  (gcd-done)
+)
+
+
+
+execute result:
+
+1 ]=> (load "c.scm")
+
+;Loading "c.scm"...
+insts/lables:
+(((test (op =) (reg b) (const 0))) ((branch (label gcd-done))) ((assign t (op rem) (reg a) (reg b))) ((assign a (reg b))) ((assign b (reg t))) ((goto (label test-b))))
+
+((test-b ((test (op =) (reg b) (const 0))) ((branch (label gcd-done))) ((assign t (op rem) (reg a) (reg b))) ((assign a (reg b))) ((assign b (reg t))) ((goto (label test-b)))) (gcd-done))
+
+
+ops:
+((initialize-stack #[compound-procedure 146]) (print-stack-statistics #[compound-procedure 147]) (rem #[compiled-procedure 19 (arith #x10b) #xf #x1f92a7]) (= #[arity-dispatched-procedure 20]))
+
+
+exp:
+(reg b)
+
+
+exp:
+(const 0)
+
+
+exp:
+(reg a)
+
+
+exp:
+(reg b)
+
+
+exp:
+(reg b)
+
+
+exp:
+(reg t)
+
+
+iii:
+(((test (op =) (reg b) (const 0)) . #[compound-procedure 148]) ((branch (label gcd-done)) . #[compound-procedure 149]) ((assign t (op rem) (reg a) (reg b)) . #[compound-procedure 150]) ((assign a (reg b)) . #[compound-procedure 151]) ((assign b (reg t)) . #[compound-procedure 152]) ((goto (label test-b))))
+
+
+update-inst! insts/lables:
+(((test (op =) (reg b) (const 0)) . #[compound-procedure 148]) ((branch (label gcd-done)) . #[compound-procedure 149]) ((assign t (op rem) (reg a) (reg b)) . #[compound-procedure 150]) ((assign a (reg b)) . #[compound-procedure 151]) ((assign b (reg t)) . #[compound-procedure 152]) ((goto (label test-b)) . #[compound-procedure 153]))
+
+((test-b ((test (op =) (reg b) (const 0)) . #[compound-procedure 148]) ((branch (label gcd-done)) . #[compound-procedure 149]) ((assign t (op rem) (reg a) (reg b)) . #[compound-procedure 150]) ((assign a (reg b)) . #[compound-procedure 151]) ((assign b (reg t)) . #[compound-procedure 152]) ((goto (label test-b)) . #[compound-procedure 153])) (gcd-done))
+
+
+exec insts:
+(
+  ((test (op =) (reg b) (const 0)) . #[compound-procedure 148]) 
+  ((branch (label gcd-done)) . #[compound-procedure 149]) 
+  ((assign t (op rem) (reg a) (reg b)) . #[compound-procedure 150]) 
+  ((assign a (reg b)) . #[compound-procedure 151]) 
+  ((assign b (reg t)) . #[compound-procedure 152]) 
+  ((goto (label test-b)) . #[compound-procedure 153])
+)
+
+
+exec insts:
+(
+  ((branch (label gcd-done)) . #[compound-procedure 149]) 
+  ((assign t (op rem) (reg a) (reg b)) . #[compound-procedure 150]) 
+  ((assign a (reg b)) . #[compound-procedure 151]) 
+  ((assign b (reg t)) . #[compound-procedure 152]) 
+  ((goto (label test-b)) . #[compound-procedure 153]))
+
+
+exec insts:
+(
+  ((assign t (op rem) (reg a) (reg b)) . #[compound-procedure 150]) 
+  ((assign a (reg b)) . #[compound-procedure 151]) 
+  ((assign b (reg t)) . #[compound-procedure 152]) 
+  ((goto (label test-b)) . #[compound-procedure 153]))
+
+
+exec insts:
+(
+  ((assign a (reg b)) . #[compound-procedure 151]) 
+  ((assign b (reg t)) . #[compound-procedure 152]) 
+  ((goto (label test-b)) . #[compound-procedure 153])
+)
+
+
+exec insts:
+(
+  ((assign b (reg t)) . #[compound-procedure 152]) 
+  ((goto (label test-b)) . #[compound-procedure 153])
+)
+
+
+exec insts:
+(
+  ((goto (label test-b)) . #[compound-procedure 153])
+)
+
+
+exec insts:
+(((test (op =) (reg b) (const 0)) . #[compound-procedure 148]) ((branch (label gcd-done)) . #[compound-procedure 149]) ((assign t (op rem) (reg a) (reg b)) . #[compound-procedure 150]) ((assign a (reg b)) . #[compound-procedure 151]) ((assign b (reg t)) . #[compound-procedure 152]) ((goto (label test-b)) . #[compound-procedure 153]))
+
+
+exec insts:
+(((branch (label gcd-done)) . #[compound-procedure 149]) ((assign t (op rem) (reg a) (reg b)) . #[compound-procedure 150]) ((assign a (reg b)) . #[compound-procedure 151]) ((assign b (reg t)) . #[compound-procedure 152]) ((goto (label test-b)) . #[compound-procedure 153]))
+
+
+exec insts:
+(((assign t (op rem) (reg a) (reg b)) . #[compound-procedure 150]) ((assign a (reg b)) . #[compound-procedure 151]) ((assign b (reg t)) . #[compound-procedure 152]) ((goto (label test-b)) . #[compound-procedure 153]))
+
+
+exec insts:
+(((assign a (reg b)) . #[compound-procedure 151]) ((assign b (reg t)) . #[compound-procedure 152]) ((goto (label test-b)) . #[compound-procedure 153]))
+
+
+exec insts:
+(((assign b (reg t)) . #[compound-procedure 152]) ((goto (label test-b)) . #[compound-procedure 153]))
+
+
+exec insts:
+(((goto (label test-b)) . #[compound-procedure 153]))
+
+
+exec insts:
+(((test (op =) (reg b) (const 0)) . #[compound-procedure 148]) ((branch (label gcd-done)) . #[compound-procedure 149]) ((assign t (op rem) (reg a) (reg b)) . #[compound-procedure 150]) ((assign a (reg b)) . #[compound-procedure 151]) ((assign b (reg t)) . #[compound-procedure 152]) ((goto (label test-b)) . #[compound-procedure 153]))
+
+
+exec insts:
+(((branch (label gcd-done)) . #[compound-procedure 149]) ((assign t (op rem) (reg a) (reg b)) . #[compound-procedure 150]) ((assign a (reg b)) . #[compound-procedure 151]) ((assign b (reg t)) . #[compound-procedure 152]) ((goto (label test-b)) . #[compound-procedure 153]))
+
+
+exec insts:
+(((assign t (op rem) (reg a) (reg b)) . #[compound-procedure 150]) ((assign a (reg b)) . #[compound-procedure 151]) ((assign b (reg t)) . #[compound-procedure 152]) ((goto (label test-b)) . #[compound-procedure 153]))
+
+
+exec insts:
+(((assign a (reg b)) . #[compound-procedure 151]) ((assign b (reg t)) . #[compound-procedure 152]) ((goto (label test-b)) . #[compound-procedure 153]))
+
+
+exec insts:
+(((assign b (reg t)) . #[compound-procedure 152]) ((goto (label test-b)) . #[compound-procedure 153]))
+
+
+exec insts:
+(((goto (label test-b)) . #[compound-procedure 153]))
+
+
+exec insts:
+(((test (op =) (reg b) (const 0)) . #[compound-procedure 148]) ((branch (label gcd-done)) . #[compound-procedure 149]) ((assign t (op rem) (reg a) (reg b)) . #[compound-procedure 150]) ((assign a (reg b)) . #[compound-procedure 151]) ((assign b (reg t)) . #[compound-procedure 152]) ((goto (label test-b)) . #[compound-procedure 153]))
+
+
+exec insts:
+(((branch (label gcd-done)) . #[compound-procedure 149]) ((assign t (op rem) (reg a) (reg b)) . #[compound-procedure 150]) ((assign a (reg b)) . #[compound-procedure 151]) ((assign b (reg t)) . #[compound-procedure 152]) ((goto (label test-b)) . #[compound-procedure 153]))
+
+
+exec insts:
+(((assign t (op rem) (reg a) (reg b)) . #[compound-procedure 150]) ((assign a (reg b)) . #[compound-procedure 151]) ((assign b (reg t)) . #[compound-procedure 152]) ((goto (label test-b)) . #[compound-procedure 153]))
+
+
+exec insts:
+(((assign a (reg b)) . #[compound-procedure 151]) ((assign b (reg t)) . #[compound-procedure 152]) ((goto (label test-b)) . #[compound-procedure 153]))
+
+
+exec insts:
+(((assign b (reg t)) . #[compound-procedure 152]) ((goto (label test-b)) . #[compound-procedure 153]))
+
+
+exec insts:
+(((goto (label test-b)) . #[compound-procedure 153]))
+
+
+exec insts:
+(((test (op =) (reg b) (const 0)) . #[compound-procedure 148]) ((branch (label gcd-done)) . #[compound-procedure 149]) ((assign t (op rem) (reg a) (reg b)) . #[compound-procedure 150]) ((assign a (reg b)) . #[compound-procedure 151]) ((assign b (reg t)) . #[compound-procedure 152]) ((goto (label test-b)) . #[compound-procedure 153]))
+
+
+exec insts:
+(((branch (label gcd-done)) . #[compound-procedure 149]) ((assign t (op rem) (reg a) (reg b)) . #[compound-procedure 150]) ((assign a (reg b)) . #[compound-procedure 151]) ((assign b (reg t)) . #[compound-procedure 152]) ((goto (label test-b)) . #[compound-procedure 153]))
+
+
+exec insts:
+()
+
+;... done
+;Value: 2
+
+1 ]=> 
